@@ -21,7 +21,10 @@ class _MyAppState extends State<MyApp> {
   //create a textcontroller
   TextEditingController textController1 = TextEditingController();
 
-  int _groupValue1 = 0;
+  String _groupValue1 = "Stooges";
+  int _groupValue2 = 0;
+  int _groupValue3 = 0;
+
 
   String selectStooge = "images/larry.jpg";
 
@@ -36,15 +39,16 @@ class _MyAppState extends State<MyApp> {
       padding: const EdgeInsets.all((20.0)),
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage(selectStooge), fit: BoxFit.fitHeight, alignment: Alignment.centerRight)),
+          image: DecorationImage(image: AssetImage(selectStooge), fit: BoxFit.fitHeight,  alignment: Alignment.centerRight)),
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
+
           const Text("Item Selected",
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
-          TextField(controller: textController1, onChanged: _setTextField),
+          TextField(controller: textController1, onChanged: _setTextField, maxLength: 8, ),
 
         ],
       ),
@@ -67,7 +71,7 @@ class _MyAppState extends State<MyApp> {
                   autofocus: true,
                   onChanged: (value) {
                     setState(() {
-                      _groupValue1 = 0;
+                      _groupValue1 = "Stooges";
                       textController1.text = value.toString();
                       selectStooge = larryphoto;
                     });
@@ -82,6 +86,91 @@ class _MyAppState extends State<MyApp> {
         ],
       )
     ]);
+  }//end of radiobuttions 1
+
+  Widget radioButtonsNew(){
+
+    List<Widget> wlist = <Widget>[];
+
+    var StoogeList = ["Larry", "Curly", "Moe", "Shemp"];
+
+    for(int i = 0; i<StoogeList.length; i++){
+
+      wlist.add(SizedBox(
+                  width: 150.0,
+                  height: 50.0,
+                  child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(StoogeList[i].toString(),style: TextStyle(fontSize: 18.0)),
+                          Radio(
+                            value: i,
+                            groupValue: _groupValue2,
+                            onChanged: (value){
+                              setState((){
+                                _groupValue2=i;
+                                if(value == 0){
+                                selectStooge = larryphoto;
+                                }else if (value ==1) {
+                                  selectStooge = curlyphoto;
+                                }
+                                else if (value ==2) {
+                                selectStooge = moephoto;
+                                }
+                                 else if (value ==3) {
+                                 selectStooge = shempphoto;
+                                         }
+
+
+                                });
+
+
+                              })
+                        ])
+      ));
+  
+
+    }// end of for where list
+
+
+    
+    Column myColumn = Column(children: wlist);
+    Row myRow = Row(children: [
+      myColumn,
+      Padding(padding: const EdgeInsets.all(5.0),
+              child: Container(
+                child: Image.asset(selectStooge, width: 150.0, fit: BoxFit.cover,),
+              ))]);
+
+    return myRow;
+  }
+
+  Widget radioTiles(){
+
+    List aNames = ["Bob", "Betty", "Beau", "Brian"];
+    List jTitles = ["Doctor", "Engineer" , "Barber", "Coder"];
+
+    List <Widget> wList = <Widget>[];
+
+    for(int c = 0; c < aNames.length; c++){
+
+      wList.add(RadioListTile(
+        value: c,
+        groupValue: _groupValue3,
+          controlAffinity: ListTileControlAffinity.trailing,
+        title: Text('Name: ' + aNames[c]),
+        subtitle: Text('Job Title: ' + jTitles[c]),
+        onChanged: (value){
+          setState(() {
+            _groupValue3 = c;
+            textController1.text = aNames[c] + " - " + jTitles[c];
+          });
+        },
+           )
+        );
+    }
+    return Column(children: (wList));
   }
 
   Widget radioButtons2() {
@@ -99,7 +188,7 @@ class _MyAppState extends State<MyApp> {
                 autofocus: true,
                 onChanged: (value) {
                   setState(() {
-                    _groupValue1 = 0;
+                    _groupValue1 = "Stooges";
                     textController1.text = value.toString();
                     selectStooge = curlyphoto;
                   });
@@ -131,7 +220,7 @@ class _MyAppState extends State<MyApp> {
                   autofocus: true,
                   onChanged: (value) {
                     setState(() {
-                      _groupValue1 = 0;
+                      _groupValue1 = "Stooges";
                       textController1.text = value.toString();
                       selectStooge = moephoto;
                     });
@@ -158,9 +247,11 @@ class _MyAppState extends State<MyApp> {
           children: [
             wItemSelected(),
             const Divider(height: 20, thickness: 5.0, color: Colors.pinkAccent),
-            radioButtons1(),
-            radioButtons2(),
-            radioButtons3()
+            //radioButtons1(),
+          //  radioButtons2(),
+           // radioButtons3()
+            radioButtonsNew(),
+            radioTiles()
           ],
         ));
   }
